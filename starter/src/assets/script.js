@@ -15,7 +15,34 @@
    - strawberry.jpg by Allec Gomes
 */
 
+const products = [
+   {
+      name: 'Cherry',
+      price: 3.00,
+      quantity: 0,
+      productId: 1,
+      image: '/images/cherry.jpg'
+   },
+   {
+      name: 'Orange',
+      price: 1.50,
+      quantity: 0,
+      productId: 2,
+      image: '/images/orange.jpg'
+   },
+   {
+      name: 'Strawberry',
+      price: 5.00,
+      quantity: 0,
+      productId: 3,
+      image: '/images/strawberry.jpg'
+   }
+];
+
 /* Declare an empty array named cart to hold the items in the cart */
+
+const cart = [];
+let balance = 0;
 
 /* Create a function named addProductToCart that takes in the product productId as an argument
   - addProductToCart should get the correct product based on the productId
@@ -23,10 +50,31 @@
   - if the product is not already in the cart, add it to the cart
 */
 
+function addProductToCart(productId) {
+   const product = products.find(p => p.productId === productId);
+   const cartItem = cart.find(item => item.productId === productId);
+   if (cartItem) {
+      cartItem.quantity++;
+   } else {
+      cart.push(product);
+      product.quantity++;
+   }
+   balance = cartTotal();
+}
+
 /* Create a function named increaseQuantity that takes in the productId as an argument
   - increaseQuantity should get the correct product based on the productId
   - increaseQuantity should then increase the product's quantity
 */
+
+function increaseQuantity(productId) {
+   const cartItem = cart.find(item => item.productId === productId);
+   if (cartItem) {
+      cartItem.quantity++;
+   }
+   balance = cartTotal();
+}
+
 
 /* Create a function named decreaseQuantity that takes in the productId as an argument
   - decreaseQuantity should get the correct product based on the productId
@@ -34,11 +82,33 @@
   - if the function decreases the quantity to 0, the product is removed from the cart
 */
 
+function decreaseQuantity(productId) {
+   const cartItem = cart.find(item => item.productId === productId);
+   if (cartItem) {
+      if (cartItem.quantity > 1) {
+         cartItem.quantity--;
+      } else {
+         cart.splice(cart.indexOf(cartItem), 1);
+         cartItem.quantity--;
+      }
+   }
+   balance = cartTotal();
+}
+
 /* Create a function named removeProductFromCart that takes in the productId as an argument
   - removeProductFromCart should get the correct product based on the productId
   - removeProductFromCart should update the product quantity to 0
   - removeProductFromCart should remove the product from the cart
 */
+
+function removeProductFromCart(productId) {
+   const cartItem = cart.find(item => item.productId === productId);
+   if (cartItem) {
+      cart.splice(cart.indexOf(cartItem), 1);
+      cartItem.quantity = 0;
+   }
+   balance = cartTotal();
+}
 
 /* Create a function named cartTotal that has no parameters
   - cartTotal should iterate through the cart to get the total cost of all products
@@ -46,7 +116,18 @@
   Hint: price and quantity can be used to determine total cost
 */
 
+function cartTotal() {
+   return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+}
+
+
 /* Create a function called emptyCart that empties the products from the cart */
+
+function emptyCart() {
+   cart.length = 0; // Empty the cart array
+}
+
+
 
 /* Create a function named pay that takes in an amount as an argument
   - amount is the money paid by customer
@@ -55,7 +136,15 @@
   Hint: cartTotal function gives us cost of all the products in the cart  
 */
 
+function pay(amount) {
+   balance = balance - amount;// Calculate the difference
+   return -1* balance;
+}
+
+
 /* Place stand out suggestions here (stand out suggestions can be found at the bottom of the project rubric.)*/
+
+
 
 
 /* The following is for running unit tests. 
@@ -63,6 +152,8 @@
    Run the following command in terminal to run tests
    npm run test
 */
+
+
 
 module.exports = {
    products,
